@@ -69,6 +69,8 @@ scaled = scaler.fit_transform(proc_dat.drop(['ts', 'minutes'], axis=1))
 pca = PCA(n_components=5)
 pc_data = pca.fit_transform(scaled)
 
+np.save("loading_vec.npy", pca.components_)
+
 # Generate labels for each Principle Component so that I can create a pd Dataframe for easier plotting
 labels = {"pc" + str(key + 1) : pc_data[:,key] for key in range(5)}
 
