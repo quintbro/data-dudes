@@ -1,4 +1,3 @@
-
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -31,9 +30,8 @@ for i in orig_dat['direction'].unique():
     tmp_dat = orig_dat[orig_dat['direction'] == i].drop("direction", axis = 1)
 
     # If there are less than 60 data points for a direction, do not add this to the data frame
-    if tmp_dat.shape[0] < 60:
+    if tmp_dat.shape[0] < 60: 
         continue
-    
     # Create names that are a mix of the previous column value and the direction of the IP Addresses
     new_names = {old : old + ':' + dir for old, dir in zip(tmp_dat.drop("ts", axis = 1).columns, np.repeat(i, tmp_dat.shape[1] - 1))}
     tmp_dat.rename(columns = new_names, inplace=True)
@@ -41,23 +39,27 @@ for i in orig_dat['direction'].unique():
     # Join the data with the old data frame to ensure that every second is accounted for
     ts = pd.merge(ts, tmp_dat, how="left", on="ts").fillna(0)
 
+# Remove orig_dat to save memory
+del orig_dat
+
 # Create a human readable datetime variable so that it is possible to aggregate by minutes
-orig_dat["minutes"] = orig_dat["ts"] \
-    .apply(lambda x : datetime.fromtimestamp(x)) \
+ts["minutes"] = ts["ts"] \
+    .apply(datetime.fromtimestamp) \
     .apply(lambda x : x.strftime("%Y-%m-%d %H:%M")) # format it so that it doesn't include seconds
 
 # Find the columns that contain the label
-label_cols = [i for i in orig_dat.columns if bool(re.search(r"[Ll]abel", i))]
+label_cols = [i for i in ts.columns if bool(re.search(r"[Ll]abel", i))]
 
 # Group by minutes, drop the columns containing the label, and sort the values
-proc_dat = orig_dat \
+proc_dat = ts \
     .groupby(["minutes"]) \
     .mean() \
     .reset_index() \
     .drop(label_cols, axis=1) \
     .sort_values(by = "minutes")
 
-ts = proc_dat["ts"]
+# Remove ts object to save memory
+del ts
 
 # Scale the data to prep it for PCA
 scaler = StandardScaler()
@@ -71,10 +73,9 @@ pc_data = pca.fit_transform(scaled)
 labels = {"pc" + str(key + 1) : pc_data[:,key] for key in range(5)}
 
 # Create PD dataframe containing principle components
-new_item = {"ts" : np.array(ts),
+new_item = {"ts" : np.array(proc_dat["ts"]),
             "minutes" : np.array(proc_dat["minutes"])}
 pc_df = pd.DataFrame({**new_item, **labels})
 
 pc_df.to_csv("pc_dat.csv")
 pc_df.to_feather("pc_dat.feather")
-
