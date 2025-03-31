@@ -4,8 +4,7 @@ net1 <- read_csv("data/phase1_NetworkData.csv") %>%
   mutate(direction = paste(`Source IP`, "->", `Destination IP`))%>%
   mutate(ts = floor(ts)) %>%
   select(ts:Header_Length,
-         Duration:Weight,
-         flow_active_time,
+         Duration:flow_active_time,
          label,
          direction) %>%
   group_by(ts, direction) %>%
@@ -15,8 +14,7 @@ net2 <- read_csv("data/phase2_NetworkData.csv") %>%
   mutate(direction = paste(`Source IP`, "->", `Destination IP`))%>%
   mutate(ts = floor(ts)) %>%
   select(ts:Header_Length,
-         Duration:Weight,
-         flow_active_time,
+         Duration:flow_active_time,
          label,
          direction) %>%
   group_by(ts, direction) %>%

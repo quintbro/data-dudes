@@ -2,3 +2,4 @@ phase*_NetworkData.csv
 /data/
 EDA.ipynb
 more_pcs.py
+names_to_include.pkl
