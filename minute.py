@@ -1,3 +1,8 @@
+#############################################################################
+####### This script is to group the grouped data from R by minute and ####### 
+#######             perform Principle Components Analysis             #######
+#############################################################################
+
 from datetime import datetime
 import pickle
 import pandas as pd
