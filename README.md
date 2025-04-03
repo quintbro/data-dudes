@@ -39,7 +39,9 @@ Ideally, the changepoint should be detected as soon as possible. We decided to u
 
 The next step in the analysis is to determine the source of the malicious activity. Our goal is to determine what caused the changepoint to occur. In order to achieve this, we subsetted the data by whether or not the interaction included a specific IP address, and then we used the same online change point detection algorithm (NP-FOCus) to determine which IP Addresses contained the source of the variation.
 
-![My Image](images/IP_add_plot.png)
+<p align="center">
+  <img src="images/IP_add_plot.png" alt="My Image" width="700">
+</p>
 
 The detection algorithm would create a flag for each changepoint detected in each of the IP Address subsets. The moment that a changepoint is detected in the aggregated data, the IP addresses that had the closest detected changepoints were observed and plotted to determine which of them was the cause of the aggregated changepoint. As can be seen from the figure above, the IP Addresses 172.16.65.1 and 172.16.65.128 are highly likely to be malicious and have been identified as the cause of the aggregated changepoint.
 
