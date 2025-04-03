@@ -1,3 +1,9 @@
+#################################################################################################
+####### This script aggregates the data by minute and then it creates a separate column   #######
+####### for each edge between any two IP Addresses in the network log data. The resulting #######
+####### 3000 columns are then scaled and run through PCA to reduce the dimension.         #######
+#################################################################################################
+
 from datetime import datetime
 import pandas as pd
 import numpy as np
