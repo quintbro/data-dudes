@@ -33,5 +33,13 @@ The most important variable that we found was the flow idle time, and it is easy
 
 ![My Image](images/small_labels_plot.png)
 
-Our final model was able to detect a changepoint at time 5718 represented by the dashed red line in \ref{fig:labels}. The "stopping time" is the moment that the model was able to detect the changepoint and it is referenced in \ref{fig:labels} as a blue dashed line. Our model "stopping time" was time 7829.
+Our final model was able to detect a changepoint at time 5718 represented by the dashed red line in \ref{fig:labels}. The "stopping time" is the moment that the model was able to detect the changepoint and it is referenced in \ref{fig:labels} as a blue dashed line. Our model "stopping time" was time 7829. 
+
+Ideally, the changepoint should be detected as soon as possible. We decided to use an online changepoint method in order to simulate a real life scenario as closely as possible. The implication is that every minute that the changepoint is not detected is another minute that the malicious user has access to the system. We were able to detect the change before a lot of the damage was done; however, the sooner that we can detect the change, the better.
+
+The next step in the analysis is to determine the source of the malicious activity. Our goal is to determine what caused the changepoint to occur. In order to achieve this, we subsetted the data by whether or not the interaction included a specific IP address, and then we used the same online change point detection algorithm (NP-FOCus) to determine which IP Addresses contained the source of the variation.
+
+![My Image](images/IP_add_plot.png)
+
+The detection algorithm would create a flag for each changepoint detected in each of the IP Address subsets. The moment that a changepoint is detected in the aggregated data, the IP addresses that had the closest detected changepoints were observed and plotted to determine which of them was the cause of the aggregated changepoint. As can be seen from the figure above, the IP Addresses 172.16.65.1 and 172.16.65.128 are highly likely to be malicious and have been identified as the cause of the aggregated changepoint.
 
