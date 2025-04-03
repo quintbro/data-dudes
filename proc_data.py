@@ -6,8 +6,8 @@ from sklearn.preprocessing import StandardScaler
 import regex as re
 import pyreadr
 
-net1 = pyreadr.read_r("net1.rds")[None]
-net2 = pyreadr.read_r("net2.rds")[None]
+net1 = pyreadr.read_r("sum_net1.rds")[None]
+net2 = pyreadr.read_r("sum_net2.rds")[None]
 
 diff = net2.ts.min() - net1.ts.max()
 
@@ -53,7 +53,7 @@ label_cols = [i for i in ts.columns if bool(re.search(r"[Ll]abel", i))]
 # Group by minutes, drop the columns containing the label, and sort the values
 proc_dat = ts \
     .groupby(["minutes"]) \
-    .mean() \
+    .sum() \
     .reset_index() \
     .drop(label_cols, axis=1) \
     .sort_values(by = "minutes")
@@ -79,5 +79,5 @@ new_item = {"ts" : np.array(proc_dat["ts"]),
             "minutes" : np.array(proc_dat["minutes"])}
 pc_df = pd.DataFrame({**new_item, **labels})
 
-pc_df.to_csv("pc_dat.csv")
-pc_df.to_feather("pc_dat.feather")
+pc_df.to_csv("pc_sum.csv")
+pc_df.to_feather("pc_sum.feather")
