@@ -3,3 +3,5 @@ phase*_NetworkData.csv
 EDA.ipynb
 more_pcs.py
 names_to_include.pkl
+/for_leo/
+*.png
